@@ -1,0 +1,17 @@
+{
+  "workbench.colorTheme": "Default Light+",
+  "window.zoomLevel": 0,
+  "eslint.enable": true,
+  "eslint.autoFixOnSave": true,
+  "editor.tabSize": 2,
+  "cSpell.userWords": [
+    "antd",
+    "ethereum",
+    "kovan",
+    "mainnet",
+    "metamask",
+    "polymathnetwork",
+    "predeploy",
+    "tokenholders"
+  ],
+}

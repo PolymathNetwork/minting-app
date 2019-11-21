@@ -1,0 +1,15 @@
+{
+  "extends": "react-app",
+  "rules": {
+    "indent": ["error", 2],
+    "no-trailing-spaces": "error",
+    "max-len": ["error", { "code": 120 }],
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"],
+    "object-curly-newline": ["error", {
+      "ObjectPattern": { "multiline": true },
+      "ImportDeclaration": "never",
+      "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+    }]
+  }
+}
