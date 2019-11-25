@@ -8,7 +8,6 @@ import { Store } from './index'
 import { Layout, Spin, Alert, Button, Upload, Icon, message, Descriptions, Badge, Divider } from 'antd'
 import ShareholdersTable from './Shareholders'
 import { _split } from './index'
-console.log(web3Utils)
 
 const { Content, Header, Sider } = Layout
 
@@ -40,16 +39,15 @@ export const reducer = (state, action) => {
       loadingMessage: '',
       error,
     }
-  case 'TOKEN_SELECTED':
+  case 'RELOAD_SHAREHOLDERS':
     const { tokenIndex } = action
     return {
       ...state,
       tokenIndex,
-      delegates: undefined,
       records: undefined,
-      pmEnabled: undefined,
       error: undefined,
-      features: undefined,
+      shareholders: [],
+      reloadShareholders: true,
     }
   default:
     throw new Error(`Unrecognized action type: ${action.type}`)
@@ -76,11 +74,7 @@ function App() {
   let {
     loading,
     loadingMessage,
-    error,
-    // pmEnabled,
-    // records,
-    // features,
-    // availableRoles
+    error
   } = state.AppReducer
   const token = tokens[tokenIndex]
 
@@ -109,8 +103,7 @@ function App() {
     }
   }, [tokens, reloadShareholders, token, dispatch])
 
-  console.log(shareholders)
-  const records = shareholders.map(({address, balance, canBuyFromSto, canReceiveAfter, kycExpiry, canSendAfter, isAccredited}) => ({
+  const records = shareholders.map(({address, balance}) => ({
     address,
     balance: balance.toString()
   }))
@@ -126,7 +119,6 @@ function App() {
       console.log(info.file, info.fileList)
     }
     if (info.file.status === 'done') {
-      console.log('done', info)
       message.success(`${info.file.name} file uploaded successfully`)
       getData(info.file.originFileObj, data => {
         handleImport(data)
@@ -137,7 +129,6 @@ function App() {
   }
 
   const handleImport = (data) => {
-    console.log('handleImport', data)
     data = data.split('\r\n')
       .map(record => record.trim())
       .filter(record => record.length)
@@ -146,14 +137,14 @@ function App() {
         let [address, amount] = record.split(',')
         return {address, amount: new BigNumber(amount)}
       })
-    console.log('parsedData', data)
     asyncAction(dispatch, () => mintTokens(data), 'Minting tokens')
   }
 
   const mintTokens = async (records) => {
-    console.log('mintTokens', records)
     const q = await token.shareholders.mintTokens({mintingData: records})
     await q.run()
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    dispatch({type: 'RELOAD_SHAREHOLDERS'})
   }
 
   const exportData = () => {
