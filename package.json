@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@polymathnetwork/react": "PolymathNetwork/polymath-react",
+    "@polymathnetwork/react": "https://github.com/PolymathNetwork/polymath-react",
     "@polymathnetwork/sdk": "2.0.1-beta.61",
     "antd": "^3.23.2",
     "file-saver": "^2.0.2",

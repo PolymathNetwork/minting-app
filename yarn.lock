@@ -1462,12 +1462,15 @@
   version "0.1.0"
   resolved "https://codeload.github.com/PolymathNetwork/polymath-react/tar.gz/28b7f3427123cd3da89fd87809954351effb224f"
   dependencies:
-    "@polymathnetwork/sdk" "2.0.1-beta.55"
-    antd "^3.25.2"
     babel-cli "6"
     babel-preset-react-app "3"
-    react "^16.12.0"
-    react-dom "^16.12.0"
+
+"@polymathnetwork/react@https://github.com/PolymathNetwork/polymath-react":
+  version "0.1.0"
+  resolved "https://github.com/PolymathNetwork/polymath-react#a3bc9f67dde119284bec59816f671b001d8ade45"
+  dependencies:
+    babel-cli "6"
+    babel-preset-react-app "3"
 
 "@polymathnetwork/sdk@2.0.1-beta.55":
   version "2.0.1-beta.55"
@@ -17471,7 +17474,6 @@ websocket@1.0.29:
   dependencies:
     debug "^2.2.0"
     es5-ext "^0.10.50"
-    gulp "^4.0.2"
     nan "^2.14.0"
     typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"

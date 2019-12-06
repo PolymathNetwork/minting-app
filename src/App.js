@@ -2,12 +2,10 @@ import React, { useContext, useEffect, Fragment } from 'react'
 import { usePolymathSdk, useTokenSelector, User, Network} from '@polymathnetwork/react'
 import { BigNumber } from '@polymathnetwork/sdk'
 import FileSaver from 'file-saver'
-import web3Utils from 'web3-utils'
 
 import { Store } from './index'
-import { Layout, Spin, Alert, Button, Upload, Icon, message, Descriptions, Badge, Divider } from 'antd'
+import { Layout, Spin, Alert, Button, Upload, Icon, message } from 'antd'
 import ShareholdersTable from './Shareholders'
-import { _split } from './index'
 
 const { Content, Header, Sider } = Layout
 
@@ -50,8 +48,9 @@ export const reducer = (state, action) => {
       reloadShareholders: true,
     }
   default:
-    throw new Error(`Unrecognized action type: ${action.type}`)
+    console.error(`Unrecognized action type: ${action.type}`)
   }
+  return state
 }
 
 async function asyncAction(dispatch, func, msg = '') {
@@ -184,7 +183,9 @@ function App() {
                   width: 250,
                   justifyContent: 'flex-start'
                 }}>
-                  {tokenSelector}
+                  {tokenSelector({
+                    onTokenSelect: () => dispatch({type: 'TOKEN_SELECTED'})
+                  })}
                 </div>
               }
             </Sider>
@@ -200,8 +201,10 @@ function App() {
               />}
               { shareholders.length > 0 &&
                 <Fragment>
-                  <Button type="primary" onClick={exportData}>Export</Button>
-                  <Upload onChange={fileUploadChange}
+                  <Button style={{marginRight: 20, marginBottom: 20 }} type="primary" onClick={exportData}>Export</Button>
+                  <Upload style={{marginBottom: 20 }} onChange={fileUploadChange}
+                    accept='csv'
+                    showUploadList={false}
                     name={'file'}
                     action={'https://www.mocky.io/v2/5cc8019d300000980a055e76'}
                     headers={{
