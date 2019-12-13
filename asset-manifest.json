@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/minting-app/static/css/main.3b9fece1.chunk.css",
-    "main.js": "/minting-app/static/js/main.2ecbdb2b.chunk.js",
-    "main.js.map": "/minting-app/static/js/main.2ecbdb2b.chunk.js.map",
+    "main.js": "/minting-app/static/js/main.33db950e.chunk.js",
+    "main.js.map": "/minting-app/static/js/main.33db950e.chunk.js.map",
     "runtime~main.js": "/minting-app/static/js/runtime~main.6dc462d5.js",
     "runtime~main.js.map": "/minting-app/static/js/runtime~main.6dc462d5.js.map",
     "static/css/2.fb9ed26a.chunk.css": "/minting-app/static/css/2.fb9ed26a.chunk.css",
-    "static/js/2.ab8825c9.chunk.js": "/minting-app/static/js/2.ab8825c9.chunk.js",
-    "static/js/2.ab8825c9.chunk.js.map": "/minting-app/static/js/2.ab8825c9.chunk.js.map",
+    "static/js/2.c61cd3d1.chunk.js": "/minting-app/static/js/2.c61cd3d1.chunk.js",
+    "static/js/2.c61cd3d1.chunk.js.map": "/minting-app/static/js/2.c61cd3d1.chunk.js.map",
     "index.html": "/minting-app/index.html",
-    "precache-manifest.a9847758e1a65a17f288705416dbd257.js": "/minting-app/precache-manifest.a9847758e1a65a17f288705416dbd257.js",
+    "precache-manifest.180bf54da16f56183332ba821ce938a1.js": "/minting-app/precache-manifest.180bf54da16f56183332ba821ce938a1.js",
     "service-worker.js": "/minting-app/service-worker.js",
     "static/css/2.fb9ed26a.chunk.css.map": "/minting-app/static/css/2.fb9ed26a.chunk.css.map",
     "static/css/main.3b9fece1.chunk.css.map": "/minting-app/static/css/main.3b9fece1.chunk.css.map"

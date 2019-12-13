@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/minting-app/precache-manifest.a9847758e1a65a17f288705416dbd257.js"
+  "/minting-app/precache-manifest.180bf54da16f56183332ba821ce938a1.js"
 );
 
 self.addEventListener('message', (event) => {
