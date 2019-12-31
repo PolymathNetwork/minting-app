@@ -120,14 +120,51 @@ function App() {
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`)
       getData(info.file.originFileObj, data => {
-        handleImport(data)
+        importData(data)
       })
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`)
     }
   }
 
-  const handleImport = (data) => {
+  const issueTokens = async (records) => {
+    const q = await token.issuance.issue({issuanceData: records})
+    await q.run()
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    dispatch({type: 'RELOAD_SHAREHOLDERS'})
+  }
+
+  const burnTokens = async (amount, from, reason = '') => {
+    asyncAction(dispatch, () => controllerRedeem(amount, from, reason), `Burning ${amount} tokens from ${from}`)
+  }
+  
+  const controllerRedeem = async (amount, from, reason) => {
+    reason = '0x' + reason
+    amount = new BigNumber(amount)
+    while (true) {
+      try {
+        const q = await token.controller.redeem({ amount, from, reason })
+        await q.run()
+        await new Promise(resolve => setTimeout(resolve, 3000))
+        dispatch({type: 'RELOAD_SHAREHOLDERS'})
+        return
+      }
+      catch (error) {
+        console.error(error)
+        if (error.message.includes('You must be the controller')) {
+          console.log(`Add ${walletAddress} as controller`)
+          const addControllerQ = await token.controller.modifyController({controller: walletAddress})
+          await addControllerQ.run()
+        }
+        else {
+          dispatch({type: 'ERROR', error: error.message})
+          return
+        }
+      }
+    }
+  }
+
+  const importData = (data) => {
     data = data.split('\r\n')
       .map(record => record.trim())
       .filter(record => record.length)
@@ -136,14 +173,7 @@ function App() {
         let [address, amount] = record.split(',')
         return {address, amount: new BigNumber(amount)}
       })
-    asyncAction(dispatch, () => mintTokens(data), 'Minting tokens')
-  }
-
-  const mintTokens = async (records) => {
-    const q = await token.shareholders.mintTokens({mintingData: records})
-    await q.run()
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    dispatch({type: 'RELOAD_SHAREHOLDERS'})
+    asyncAction(dispatch, () => issueTokens(data), 'Issuing tokens')
   }
 
   const exportData = () => {
@@ -199,10 +229,10 @@ function App() {
                 closable
                 showIcon
               />}
-              { shareholders.length > 0 &&
+              { token && 
                 <Fragment>
-                  <Button style={{marginRight: 20, marginBottom: 20 }} type="primary" onClick={exportData}>Export</Button>
-                  <Upload style={{marginBottom: 20 }} onChange={fileUploadChange}
+                  <Button style={{ marginTop: 20, marginBottom: 20, marginRight: 20 }} type="primary" onClick={exportData}>Export</Button>
+                  <Upload style={{ marginTop: 20, marginBottom: 20 }} onChange={fileUploadChange}
                     accept='csv'
                     showUploadList={false}
                     name={'file'}
@@ -214,9 +244,10 @@ function App() {
                       <Icon type="upload"/>Import
                     </Button>
                   </Upload>
-                  <ShareholdersTable shareholders={records}/>
                 </Fragment>
               }
+              { shareholders.length > 0 &&
+              <ShareholdersTable shareholders={records} burnTokens={burnTokens}/> }
             </Content>
           </Layout>
         </Layout>
