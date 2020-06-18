@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@polymathnetwork/react": "https://github.com/PolymathNetwork/polymath-react",
-    "@polymathnetwork/sdk": "2.0.1-beta.79",
+    "@polymathnetwork/sdk": "3.0.0",
     "antd": "^3.23.2",
     "file-saver": "^2.0.2",
     "gh-pages": "^2.1.1",

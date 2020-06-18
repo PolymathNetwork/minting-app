@@ -3,7 +3,7 @@ import { Table, Typography, Button, InputNumber, Popover } from 'antd'
 const { Column } = Table
 const { Text } = Typography
 
-export default function ShareholdersTable({ shareholders, burnTokens }) {
+export default function TokenholdersTable({ tokenholders, burnTokens }) {
   const [ burnAmount, setBurnAmount ] = useState(1)
 
   function handleChange(v, max) {
@@ -13,7 +13,7 @@ export default function ShareholdersTable({ shareholders, burnTokens }) {
   }
 
   return (
-    <Table dataSource={shareholders} rowKey="address">
+    <Table dataSource={tokenholders} rowKey="address">
       <Column
         title='Address'
         dataIndex='address'

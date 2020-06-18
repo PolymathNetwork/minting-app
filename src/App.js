@@ -5,7 +5,7 @@ import FileSaver from 'file-saver'
 
 import { Store } from './index'
 import { Layout, Spin, Alert, Button, Upload, Icon, message } from 'antd'
-import ShareholdersTable from './Shareholders'
+import TokenholdersTable from './Tokenholders'
 
 const { Content, Header, Sider } = Layout
 
@@ -37,15 +37,15 @@ export const reducer = (state, action) => {
       loadingMessage: '',
       error,
     }
-  case 'RELOAD_SHAREHOLDERS':
+  case 'RELOAD_TOKENHOLDERS':
     const { tokenIndex } = action
     return {
       ...state,
       tokenIndex,
       records: undefined,
       error: undefined,
-      shareholders: [],
-      reloadShareholders: true,
+      tokenholders: [],
+      reloadTokenholders: true,
     }
   default:
     console.error(`Unrecognized action type: ${action.type}`)
@@ -66,7 +66,7 @@ async function asyncAction(dispatch, func, msg = '') {
 
 function App() {
   const [state, dispatch] = useContext(Store)
-  const { reloadShareholders, shareholders } = state.AppReducer
+  const { reloadTokenholders, tokenholders } = state.AppReducer
   let {error: sdkError, sdk, networkId, walletAddress} = usePolymathSdk()
   let {error: tokenSelectorError, tokenSelector, tokens, tokenIndex} = useTokenSelector(sdk, walletAddress)
 
@@ -89,20 +89,20 @@ function App() {
     }
   }
 
-  // Fetch shareholders + balances.
+  // Fetch tokenholders + balances.
   useEffect(() => {
-    async function fetchShareholders() {
-      let shareholders = await token.shareholders.getShareholders()
+    async function fetchTokenholders() {
+      let tokenholders = await token.tokenholders.getTokenholders()
       return {
-        shareholders
+        tokenholders
       }
     }
-    if ( reloadShareholders === true | token !== undefined ) {
-      asyncAction(dispatch, () => fetchShareholders(token), 'Fetching shareholders as well as their token balances')
+    if ( reloadTokenholders === true | token !== undefined ) {
+      asyncAction(dispatch, () => fetchTokenholders(token), 'Fetching tokenholders as well as their token balances')
     }
-  }, [tokens, reloadShareholders, token, dispatch])
+  }, [tokens, reloadTokenholders, token, dispatch])
 
-  const records = shareholders.map(({address, balance}) => ({
+  const records = tokenholders.map(({address, balance}) => ({
     address,
     balance: balance.toString()
   }))
@@ -131,7 +131,7 @@ function App() {
     const q = await token.issuance.issue({issuanceData: records})
     await q.run()
     await new Promise(resolve => setTimeout(resolve, 1000))
-    dispatch({type: 'RELOAD_SHAREHOLDERS'})
+    dispatch({type: 'RELOAD_TOKENHOLDERS'})
   }
 
   const burnTokens = async (amount, from, reason = '') => {
@@ -146,7 +146,7 @@ function App() {
         const q = await token.controller.redeem({ amount, from, reason })
         await q.run()
         await new Promise(resolve => setTimeout(resolve, 3000))
-        dispatch({type: 'RELOAD_SHAREHOLDERS'})
+        dispatch({type: 'RELOAD_TOKENHOLDERS'})
         return
       }
       catch (error) {
@@ -182,7 +182,7 @@ function App() {
     }).join('\r\n')
     console.log('csvContent', csvContent)
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' })
-    FileSaver.saveAs(blob, 'whitelist.csv')
+    FileSaver.saveAs(blob, 'investors.csv')
   }
 
   return (
@@ -246,8 +246,8 @@ function App() {
                   </Upload>
                 </Fragment>
               }
-              { shareholders.length > 0 &&
-              <ShareholdersTable shareholders={records} burnTokens={burnTokens}/> }
+              { tokenholders.length > 0 &&
+              <TokenholdersTable tokenholders={records} burnTokens={burnTokens}/> }
             </Content>
           </Layout>
         </Layout>

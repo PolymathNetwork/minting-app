@@ -15,8 +15,8 @@ const initialState = {
     walletAddress: '',
     tokens: [],
     tokenIndex: undefined,
-    shareholders: [],
-    reloadShareholders: false
+    tokenholders: [],
+    reloadTokenholders: false
   }
 }
 
